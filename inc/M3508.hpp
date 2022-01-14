@@ -1,12 +1,12 @@
-#ifndef M2006_HPP
-#define M2006_HPP
+#ifndef M3508_HPP
+#define M3508_HPP
 
 #include "CanManager.hpp"
 #include "Pid.hpp"
 #include "Motor.hpp"
 
 
-class M2006 : public CanMsgHandler, public Motor
+class M3508 : public CanMsgHandler, public Motor
 {
 private:
     
@@ -14,7 +14,7 @@ private:
     uint32_t canId;
     const static float RawPos2Rad;
     const static float RawRpm2Rps;
-    const static float PiDiv36;    
+    const static float PiDiv19;
     
     //Raw feedback
     uint16_t ecd  = 0;
@@ -26,7 +26,6 @@ private:
     float rotorPosition = 0.0;
     float rotorLastPosition = 0.0;
     
-
 public:
 
     MotorControlModeType controlMode = Motor::RELAX_MODE;
@@ -38,7 +37,7 @@ public:
 
 public:
 
-    M2006() : CanMsgHandler() , Motor()
+    M3508() : CanMsgHandler() , Motor()
     {};
 
     void Registration(int id){

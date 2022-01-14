@@ -1,14 +1,14 @@
-#include "M2006.hpp"
+#include "M3508.hpp"
 #include "Math.hpp"
 #include "DjiMotorManager.hpp"
 
 
-const float M2006::RawPos2Rad =  0.0000212970875893596f;  /* 2Pi / 8191 / 36 */
-const float M2006::RawRpm2Rps =  0.002908882037037037f;    /* 2Pi / 60 / 36 */
-const float M2006::PiDiv36    =  0.0872664826f;      /* PI / 36 */
+const float M3508::RawPos2Rad = 0.00003994561794f;  /* 2Pi / 8191 / 3591 X 187*/
+const float M3508::RawRpm2Rps = 0.005453242609f;    /* 2Pi / 60 X 187 / 3591 */
+const float M3508::PiDiv19 = 0.1635972783f;      /* PI / 3591 X 187 */
 
 
-void M2006::HandleNewMsg(can_frame msg)
+void M3508::HandleNewMsg(can_frame msg)
 {
     ecd = (uint16_t)(msg.data[0] << 8 | msg.data[1]);           
     speed_rpm = (uint16_t)(msg.data[2] << 8 | msg.data[3]);     
@@ -16,14 +16,16 @@ void M2006::HandleNewMsg(can_frame msg)
     temperate = msg.data[6];  
 
     rotorLastPosition = rotorPosition;
-    rotorPosition = ecd * RawPos2Rad - PiDiv36;
+    rotorPosition = ecd * RawPos2Rad - PiDiv19;
 
-    positionFdb += Math::LoopFloatConstrain((rotorPosition - rotorLastPosition), - PiDiv36, PiDiv36);
+    positionFdb += Math::LoopFloatConstrain((rotorPosition - rotorLastPosition), - PiDiv19, PiDiv19);
     speedFdb = speed_rpm * RawRpm2Rps;
+
+    std::cout << speedFdb << std::endl;
 
 }
 
-void M2006::Update()
+void M3508::Update()
 {
     if (controlMode == POS_MODE)
     {
@@ -50,5 +52,5 @@ void M2006::Update()
     //mapping current back to -1000 to 1000
     uint16_t currentSend = currentSet * 1000;
     DjiMotorManager::Instance() -> Add2Buffer(canId,currentSend);
-
 }
+

@@ -13,6 +13,7 @@ set(SRCS
     src/Math.cpp
     src/M2006.cpp
     src/Pid.cpp
+    src/M3508.cpp
     )
 
 add_executable(Test main.cpp ${SRCS})
