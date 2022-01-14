@@ -21,7 +21,7 @@ void M3508::HandleNewMsg(can_frame msg)
     positionFdb += Math::LoopFloatConstrain((rotorPosition - rotorLastPosition), - PiDiv19, PiDiv19);
     speedFdb = speed_rpm * RawRpm2Rps;
 
-    std::cout << speedFdb << std::endl;
+    //std::cout << speedFdb << std::endl;
 
 }
 
@@ -50,7 +50,7 @@ void M3508::Update()
     }
 
     //mapping current back to -1000 to 1000
-    uint16_t currentSend = currentSet * 1000;
+    int16_t currentSend = currentSet * 1000;
     DjiMotorManager::Instance() -> Add2Buffer(canId,currentSend);
 }
 

@@ -2,45 +2,60 @@
 #include "DjiMotorManager.hpp"
 #include "M2006.hpp"
 #include "M3508.hpp"
+#include "joystick.hh"
+
+M3508 ChassisMotor[4];
+float Vy = 1.0;
+float Vw = 0.0;
+Joystick joystick("/dev/input/js0");
 
 int main()
 {
-    M2006 testMotor;
-    M2006 testMotor2;
-    M3508 testMotor3;
 
-    testMotor.Registration(0x207);
-    testMotor2.Registration(0x202);
-    testMotor3.Registration(0x201);
-
-    testMotor.pidSpeed.kp = 3;
-	testMotor.pidSpeed.ki = 0.2;
-	testMotor.pidSpeed.kd = 0.05;
-	testMotor.pidSpeed.maxOut = 10;
-	testMotor.pidSpeed.maxIOut = 10;
-    testMotor.controlMode = Motor::RELAX_MODE;
-
-    testMotor2.pidSpeed.kp = 3;
-	testMotor2.pidSpeed.ki = 0.2;
-	testMotor2.pidSpeed.kd = 0.05;
-	testMotor2.pidSpeed.maxOut = 10;
-	testMotor2.pidSpeed.maxIOut = 10;
-    testMotor2.controlMode = Motor::RELAX_MODE;    
-
-    testMotor3.pidSpeed.kp = 3;
-	testMotor3.pidSpeed.ki = 0.2;
-	testMotor3.pidSpeed.kd = 0.05;
-	testMotor3.pidSpeed.maxOut = 10;
-	testMotor3.pidSpeed.maxIOut = 10;
-    testMotor3.controlMode = Motor::SPD_MODE;
+    for(int i = 0; i < 4; i++)
+    {
+        ChassisMotor[i].Registration(0x201+i);
+        ChassisMotor[i].pidSpeed.kp = 3;
+	    ChassisMotor[i].pidSpeed.ki = 0.2;
+	    ChassisMotor[i].pidSpeed.kd = 0.05;
+	    ChassisMotor[i].pidSpeed.maxOut = 10;
+	    ChassisMotor[i].pidSpeed.maxIOut = 10;
+        ChassisMotor[i].controlMode = Motor::SPD_MODE;
+    }
 
     CanManager::Instance()->SetPortName("can0");
     CanManager::Instance()->Init();
 
     while(true)
     {
-        testMotor3.speedSet = 2.0f;
-        testMotor3.Update();
+
+        JoystickEvent event;
+        if (joystick.sample(&event))
+        {
+            if (!event.isAxis()) continue;
+
+            if(event.number == 1)
+            {
+                Vy = 5.0 * -static_cast<double>(event.value)/32767.0;
+                std::cout << Vy << std::endl;
+            }
+
+            if(event.number == 3)
+            {
+                Vw = 5.0 * static_cast<double>(event.value)/32767.0;
+            }      
+        }
+        
+        ChassisMotor[0].speedSet = Vy - Vw; //RightFront
+        ChassisMotor[1].speedSet = Vy + Vw; //LeftFront
+        ChassisMotor[2].speedSet = Vy + Vw; //LeftRear
+        ChassisMotor[3].speedSet = Vy - Vw; //RightRear        
+
+        for(int i = 0; i < 4; i++)
+        {
+            ChassisMotor[i].Update();
+        }
+
         DjiMotorManager::Instance()->Update();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
