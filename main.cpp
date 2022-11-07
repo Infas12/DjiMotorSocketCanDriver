@@ -12,8 +12,8 @@ int main()
     testMotor.Registration(0x207);
     testMotor2.Registration(0x202);
     testMotor3.Registration(0x201);
-
-    testMotor.pidSpeed.kp = 3;
+	
+	testMotor.pidSpeed.kp = 3;
 	testMotor.pidSpeed.ki = 0.2;
 	testMotor.pidSpeed.kd = 0.05;
 	testMotor.pidSpeed.maxOut = 10;
