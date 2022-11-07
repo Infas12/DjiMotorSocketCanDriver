@@ -6,7 +6,8 @@ A simple c++ driver for Dji M3508 and M2006.
 Linux
 
 ## Requirements
-CMake
+- CMake
+- a USB2Can board that supports socketCan
 
 ## Usage
 
