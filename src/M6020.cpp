@@ -13,7 +13,8 @@ void M6020::HandleNewMsg(can_frame msg)
     given_current = (uint16_t)(msg.data[4] << 8 | msg.data[5]); 
     temperate = msg.data[6];  
 
-    positionFdb += Math::LoopFloatConstrain((float)(ecd - offset) * RawPos2Rad,- Math::Pi, Math::Pi);
+    positionFdb = Math::LoopFloatConstrain((float)(ecd - offset) * RawPos2Rad,- Math::Pi, Math::Pi);
+
     speedFdb = speed_rpm * RawRpm2Rps;
 
 }

@@ -7,11 +7,11 @@
 int main()
 {
     M6020 testMotor;
-    testMotor.Registration(0x208);
+    testMotor.Registration(517);
 	
-	testMotor.pidSpeed.kp = 3;
-	testMotor.pidSpeed.ki = 0.2;
-	testMotor.pidSpeed.kd = 0.05;
+	testMotor.pidSpeed.kp = 0;
+	testMotor.pidSpeed.ki = 0.0;
+	testMotor.pidSpeed.kd = 0.0;
 	testMotor.pidSpeed.maxOut = 10;
 	testMotor.pidSpeed.maxIOut = 10;
     testMotor.controlMode = Motor::RELAX_MODE;
@@ -22,6 +22,8 @@ int main()
     while(true)
     {
         testMotor.speedSet = 2.0f;
+        std::cout << testMotor.speedFdb << std::endl;
+
         testMotor.Update();
         DjiMotorManager::Instance()->Update();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
