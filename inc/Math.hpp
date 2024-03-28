@@ -75,6 +75,26 @@ public:
     {
         return (float)(_inNum) * _inPrecision + _inMin;
     }
+
+    static float dm_uint_to_float(uint16_t x_int, float x_min, float x_max, uint16_t bits){
+        /// converts unsigned int to float, given range and number of bits ///
+        /// for DM series motors ///
+        float span = x_max - x_min;
+        float offset = x_min;
+        return ((float)x_int)*span/((float)((1<<bits)-1)) + offset;
+    }
+
+    static int dm_float_to_uint(float x, float x_min, float x_max, uint16_t bits){
+        /// Converts a float to an unsigned int, given range and number of bits
+        float span = x_max - x_min;
+        float offset = x_min;
+        return (int) ((x-offset)*((float)((1<<bits)-1))/span);
+    }
+
+
+
+
+
 };
 
 #endif

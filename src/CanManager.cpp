@@ -78,7 +78,7 @@ void* CanManager::RxThread(void *argv)
             auto iter = Instance()->HandlerMap.find(frame.can_id);
             if(iter==Instance()->HandlerMap.end()) //Handler not found
             {
-                std::cerr << "Handler for Can ID " << frame.can_id  << " do not exist" << std::endl;
+                std::cerr << "Handler for Can ID " << frame.can_id  << " does not exist" << std::endl;
                 exit(1);
             }
 

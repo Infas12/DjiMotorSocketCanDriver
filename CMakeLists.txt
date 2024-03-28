@@ -15,6 +15,7 @@ set(SRCS
     src/Pid.cpp
     src/M3508.cpp
     src/M6020.cpp
+    src/DM4310.cpp
     )
 
 add_executable(Test main.cpp ${SRCS})

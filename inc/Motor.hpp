@@ -8,7 +8,7 @@ public:
     {
         RELAX_MODE,
         SPD_MODE,
-        POS_MODE,        
+        POS_MODE
     };
 
     float speedFdb = 0.0;

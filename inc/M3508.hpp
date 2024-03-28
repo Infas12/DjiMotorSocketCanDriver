@@ -35,8 +35,6 @@ public:
     float currentSet = 0.0;
     
 
-public:
-
     M3508() : CanMsgHandler() , Motor()
     {};
 
